@@ -20,7 +20,7 @@ func get_color() -> Color:
 	if player == 'red':
 		return Color(1.0, 0.3, 0.3, 1)
 	elif player == 'blue':
-		return Color(0.3, 0.3, 1.0, 1)
+		return Color(0.1, 0.3, 1.0, 1)
 	else:
 		return Color(0.8, 0.8, 0.3, 1)
 		

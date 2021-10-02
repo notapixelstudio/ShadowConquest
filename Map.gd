@@ -3,11 +3,12 @@ extends Control
 const Delaunator = preload("res://lib/Delaunator.gd")
 
 export var margin := 10
-export var seed_points := 256
-export var starting_territory_height := 120.0
+export var seed_points := 128
+export var starting_territory_height := 200.0
+export var starting_territory_width := 200.0
 export var starting_cities := 1
-export var starting_towns := 2
-export var starting_free_cities := 6
+export var starting_towns := 3
+export var starting_free_cities := 3
 export var starting_free_towns := 12
 
 var points : Array
@@ -44,9 +45,9 @@ func _ready():
 		]))
 		
 		# assign a cell to a player if near the top or bottom sides
-		if points[p].y < starting_territory_height:
+		if points[p].y < starting_territory_height and points[p].x < starting_territory_width:
 			cell.set_player('red')
-		elif points[p].y > rect_size.y - starting_territory_height:
+		elif points[p].y > rect_size.y - starting_territory_height and points[p].x > rect_size.x - starting_territory_width:
 			cell.set_player('blue')
 		
 		cells.append(cell)
@@ -96,10 +97,12 @@ func draw_cells():
 			if cell.building == 'town':
 				size = Vector2(6,6)
 			elif cell.building == 'city':
-				size = Vector2(12,12)
+				size = Vector2(14,14)
 			draw_rect(Rect2(cell.centroid-size/2, size), cell.get_color())
-			draw_rect(Rect2(cell.centroid-size/2, size), Color(0,0,0,1), false)
-
+			draw_rect(Rect2(cell.centroid-size/2, size), Color(0,0,0,1), false, 1.5, true)
+			if cell.building == 'city':
+				draw_rect(Rect2(cell.centroid-size*0.6/2, size*0.6), Color(0,0,0,1), false, 1.5, true)
+				
 func draw_voronoi_edges(points, d):
 	for e in d.triangles.size():
 		if (e < d.halfedges[e]):
@@ -108,7 +111,7 @@ func draw_voronoi_edges(points, d):
 			draw_line(
 				Vector2(p[0], p[1]),
 				Vector2(q[0], q[1]),
-				Color(0,0,0,0.2),
+				Color(0,0,0,0.4),
 				1.0,
 				true)
 				
